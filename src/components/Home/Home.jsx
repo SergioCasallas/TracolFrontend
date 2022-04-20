@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import logo from "../../assets/images/tracol_logo.png";
 import { getDatosActa } from "../../service/apiActa/apiActa";
+import PopUp from "../PopUp/PopUp";
 
 const Home = () => {
   const [datosUsuario, setDatosUsuario] = useState({
@@ -81,52 +82,6 @@ const Home = () => {
     }
   }, [numeroTRAParams, codigoVerificacionParams]);
 
-  // !###########################################################################################################
-  // const enviarData = async () => {
-  //   console.log(datosUsuario);
-  //   //     if (
-  //   //       datosUsuario.numeroTRA !== null &&
-  //   //       datosUsuario.numeroTRA !== undefined &&
-  //   //       datosUsuario.codigoVerificacion !== null &&
-  //   //       datosUsuario.codigoVerificacion !== undefined
-  //   //     ) {
-
-  //   //   const datosObtenidosActa = await getDatosActa(datosUsuario);
-  //   //   console.log(datosObtenidosActa);
-  //   //   if (datosObtenidosActa.mensaje) {
-  //   //     setMessageError(datosObtenidosActa.mensaje);
-  //   //     setTimeout(() => {
-  //   //       setMessageError(null);
-  //   //     }, 3000);
-  //   //     setDatosActa(null);
-  //   //   } else {
-  //   //     setDatosActa(await datosObtenidosActa);
-  //   //   }
-  //   // };
-  // };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (
-  //       numeroTRAParams !== null &&
-  //       codigoVerificacionParams !== null &&
-  //       numeroTRAParams !== undefined &&
-  //       codigoVerificacionParams !== undefined
-  //     ) {
-  //       await setDatosUsuario({
-  //         ...datosUsuario,
-  //         codigoVerificacion: codigoVerificacionParams,
-  //         numeroTRA: numeroTRAParams,
-  //       });
-  //       await enviarData();
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [numeroTRAParams, codigoVerificacionParams]);
-
-  // !###########################################################################################################
-
   const guardarDatos = (e) => {
     setDatosUsuario({
       ...datosUsuario,
@@ -137,6 +92,7 @@ const Home = () => {
   const fecha = new Date();
   return (
     <div className="contenedor-home">
+      {messageError ? <h1 className="message-error">{messageError}</h1> : null}
       <img className="home__logo" src={logo} alt="logo"></img>
       <h1 className="home__title">Verificación de actas</h1>
       <form onSubmit={enviarDatos} className="home__form">
@@ -162,41 +118,43 @@ const Home = () => {
         </button>
       </form>
       {datosActa ? (
-        <table border="1" className="table-result">
-          <tbody>
-            <tr className="table-result__tr">
-              <th>Solicitud</th>
-              <td className="table-result__td">
-                {datosActa[0].Collection_Order}
-              </td>
-            </tr>
-            <tr className="table-result__tr">
-              <th>Fecha</th>
-              <td className="table-result__td">
-                {datosActa[0].Collection_Date.substr(0, 10)}
-              </td>
-            </tr>
-            <tr className="table-result__tr">
-              <th>Cliente</th>
-              <td className="table-result__td">{datosActa[0].Company_Name}</td>
-            </tr>
-            <tr className="table-result__tr">
-              <th>Sede</th>
-              <td className="table-result__td">
-                {datosActa[0].Company_Address}
-              </td>
-            </tr>
-            <tr className="table-result__tr">
-              <th>Fecha y hora verificación</th>
-              <td className="table-result__td">
-                {fecha.getDate()}/{fecha.getMonth() + 1}/{fecha.getFullYear()}{" "}
-                {fecha.getHours()}:{fecha.getMinutes()}:{fecha.getSeconds()}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      ) : null}
-      {messageError ? <h1 className="message-error">{messageError}</h1> : null}
+        <>
+          <PopUp datosActa={datosActa} />
+        </>
+      ) : // <table border="1" className="table-result">
+      //   <tbody>
+      //     <tr className="table-result__tr">
+      //       <th>Solicitud</th>
+      //       <td className="table-result__td">
+      //         {datosActa[0].Collection_Order}
+      //       </td>
+      //     </tr>
+      //     <tr className="table-result__tr">
+      //       <th>Fecha</th>
+      //       <td className="table-result__td">
+      //         {datosActa[0].Collection_Date.substr(0, 10)}
+      //       </td>
+      //     </tr>
+      //     <tr className="table-result__tr">
+      //       <th>Cliente</th>
+      //       <td className="table-result__td">{datosActa[0].Company_Name}</td>
+      //     </tr>
+      //     <tr className="table-result__tr">
+      //       <th>Sede</th>
+      //       <td className="table-result__td">
+      //         {datosActa[0].Company_Address}
+      //       </td>
+      //     </tr>
+      //     <tr className="table-result__tr">
+      //       <th>Fecha y hora verificación</th>
+      //       <td className="table-result__td">
+      //         {fecha.getDate()}/{fecha.getMonth() + 1}/{fecha.getFullYear()}{" "}
+      //         {fecha.getHours()}:{fecha.getMinutes()}:{fecha.getSeconds()}
+      //       </td>
+      //     </tr>
+      //   </tbody>
+      // </table>
+      null}
     </div>
   );
 };
